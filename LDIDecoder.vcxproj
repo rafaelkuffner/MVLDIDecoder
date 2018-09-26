@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{73B53141-83DE-43C8-9EAA-34D9696AA9A5}</ProjectGuid>
+    <RootNamespace>LDIDecoder</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>
+    </CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)\common;$(ProjectDir)\common\thirdparty\glfw\include;$(ProjectDir)\common\thirdparty\stb_image;$(ProjectDir)\common\thirdparty\glew\include;$(ProjectDir)\common\thirdparty\glm;$(ProjectDir)\common\inc;D:\PCL\PCL 1.6.0\3rdParty\Boost\include;..\FFMpeg\dev\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>INIT_CUDA_GL=1;GLM_FORCE_RADIANS;_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;legacy_stdio_definitions.lib;avcodec.lib;avformat.lib;avutil.lib;swresample.lib;swscale.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\lib;..\FFMpeg\dev\lib</AdditionalLibraryDirectories>
+      <AdditionalOptions>/wd4996 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command> copy "$(ProjectDir)\shaders\*" "$(OutDir)\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)\common;$(ProjectDir)\common\thirdparty\glfw\include;$(ProjectDir)\common\thirdparty\stb_image;$(ProjectDir)\common\thirdparty\glew\include;$(ProjectDir)\common\thirdparty\glm;$(ProjectDir)\common\inc;D:\PCL\PCL 1.6.0\3rdParty\Boost\include;..\FFMpeg\dev\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;INIT_CUDA_GL=1;GLM_FORCE_RADIANS;NDEBUG;_CONSOLE;_LIB;_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(ProjectDir)\lib;..\FFMpeg\dev\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;legacy_stdio_definitions.lib;avcodec.lib;avformat.lib;avutil.lib;swresample.lib;swscale.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+    <PostBuildEvent>
+      <Command> copy "$(ProjectDir)\shaders\*" "$(OutDir)\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="common\platform_windows.cpp" />
+    <ClCompile Include="common\src\cudaModuleMgr.cpp" />
+    <ClCompile Include="common\src\dynlink_cuda.cpp" />
+    <ClCompile Include="common\src\dynlink_nvcuvid.cpp" />
+    <ClCompile Include="common\thirdparty\glew\src\glew.c" />
+    <ClCompile Include="FFDecoder.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="NvDec\cudaProcessFrame.cpp" />
+    <ClCompile Include="NvDec\FrameQueue.cpp" />
+    <ClCompile Include="NvDec\ImageGL.cpp" />
+    <ClCompile Include="NvDec\NvDecodeGL.cpp" />
+    <ClCompile Include="NvDec\VideoDecoder.cpp" />
+    <ClCompile Include="NvDec\VideoParser.cpp" />
+    <ClCompile Include="NvDec\VideoSource.cpp" />
+    <ClCompile Include="RVLDecoder.cpp" />
+    <ClCompile Include="tdogl\Bitmap.cpp" />
+    <ClCompile Include="tdogl\Camera.cpp" />
+    <ClCompile Include="tdogl\FrameBuffer.cpp" />
+    <ClCompile Include="tdogl\Program.cpp" />
+    <ClCompile Include="tdogl\Shader.cpp" />
+    <ClCompile Include="tdogl\Texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\blur.frag" />
+    <None Include="shaders\frag-brush-shader.frag" />
+    <None Include="shaders\normals-shader.geom" />
+    <None Include="shaders\rtt.frag" />
+    <None Include="shaders\rtt.vert" />
+    <None Include="shaders\simp.frag" />
+    <None Include="shaders\simp.vert" />
+    <None Include="shaders\splat-shader.geom" />
+    <None Include="shaders\vertex-shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\OpenGL3Repository\source\common\platform.hpp" />
+    <ClInclude Include="common\inc\cudaModuleMgr.h" />
+    <ClInclude Include="FFDecoder.h" />
+    <ClInclude Include="NvDec\cudaProcessFrame.h" />
+    <ClInclude Include="NvDec\FrameQueue.h" />
+    <ClInclude Include="NvDec\ImageGL.h" />
+    <ClInclude Include="NvDec\NvDecodeGL.h" />
+    <ClInclude Include="NvDec\VideoDecoder.h" />
+    <ClInclude Include="NvDec\VideoParser.h" />
+    <ClInclude Include="NvDec\VideoSource.h" />
+    <ClInclude Include="RVLDecoder.h" />
+    <ClInclude Include="tdogl\Bitmap.h" />
+    <ClInclude Include="tdogl\Camera.h" />
+    <ClInclude Include="tdogl\FrameBuffer.h" />
+    <ClInclude Include="tdogl\Program.h" />
+    <ClInclude Include="tdogl\Shader.h" />
+    <ClInclude Include="tdogl\Texture.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

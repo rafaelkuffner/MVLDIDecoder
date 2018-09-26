@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\tdogl">
+      <UniqueIdentifier>{f6876581-7000-4e7a-a67b-f6d11d68a854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{8f35eefb-2d21-40e1-9896-9078b03dbc5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\NVDec">
+      <UniqueIdentifier>{b68feb7c-a45a-420b-8fad-0644da6c98c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{22566fd7-5db3-4201-a3e1-eb858f9ff7cd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tdogl\Bitmap.cpp">
+      <Filter>Source Files\tdogl</Filter>
+    </ClCompile>
+    <ClCompile Include="tdogl\Camera.cpp">
+      <Filter>Source Files\tdogl</Filter>
+    </ClCompile>
+    <ClCompile Include="tdogl\FrameBuffer.cpp">
+      <Filter>Source Files\tdogl</Filter>
+    </ClCompile>
+    <ClCompile Include="tdogl\Program.cpp">
+      <Filter>Source Files\tdogl</Filter>
+    </ClCompile>
+    <ClCompile Include="tdogl\Shader.cpp">
+      <Filter>Source Files\tdogl</Filter>
+    </ClCompile>
+    <ClCompile Include="tdogl\Texture.cpp">
+      <Filter>Source Files\tdogl</Filter>
+    </ClCompile>
+    <ClCompile Include="common\platform_windows.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\thirdparty\glew\src\glew.c">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="NvDec\NvDecodeGL.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="common\src\dynlink_nvcuvid.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="common\src\dynlink_cuda.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="NvDec\VideoParser.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="NvDec\VideoSource.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="NvDec\cudaProcessFrame.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="NvDec\FrameQueue.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="NvDec\ImageGL.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="NvDec\VideoDecoder.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="common\src\cudaModuleMgr.cpp">
+      <Filter>Source Files\NVDec</Filter>
+    </ClCompile>
+    <ClCompile Include="FFDecoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RVLDecoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\blur.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\frag-brush-shader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\normals-shader.geom">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\rtt.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\rtt.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\simp.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\simp.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\splat-shader.geom">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\vertex-shader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tdogl\Bitmap.h">
+      <Filter>Source Files\tdogl</Filter>
+    </ClInclude>
+    <ClInclude Include="tdogl\Camera.h">
+      <Filter>Source Files\tdogl</Filter>
+    </ClInclude>
+    <ClInclude Include="tdogl\FrameBuffer.h">
+      <Filter>Source Files\tdogl</Filter>
+    </ClInclude>
+    <ClInclude Include="tdogl\Program.h">
+      <Filter>Source Files\tdogl</Filter>
+    </ClInclude>
+    <ClInclude Include="tdogl\Shader.h">
+      <Filter>Source Files\tdogl</Filter>
+    </ClInclude>
+    <ClInclude Include="tdogl\Texture.h">
+      <Filter>Source Files\tdogl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\OpenGL3Repository\source\common\platform.hpp">
+      <Filter>Source Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="NvDec\NvDecodeGL.h">
+      <Filter>Source Files\NVDec</Filter>
+    </ClInclude>
+    <ClInclude Include="NvDec\VideoDecoder.h">
+      <Filter>Source Files\NVDec</Filter>
+    </ClInclude>
+    <ClInclude Include="NvDec\VideoParser.h">
+      <Filter>Source Files\NVDec</Filter>
+    </ClInclude>
+    <ClInclude Include="NvDec\VideoSource.h">
+      <Filter>Source Files\NVDec</Filter>
+    </ClInclude>
+    <ClInclude Include="NvDec\cudaProcessFrame.h">
+      <Filter>Source Files\NVDec</Filter>
+    </ClInclude>
+    <ClInclude Include="NvDec\FrameQueue.h">
+      <Filter>Source Files\NVDec</Filter>
+    </ClInclude>
+    <ClInclude Include="NvDec\ImageGL.h">
+      <Filter>Source Files\NVDec</Filter>
+    </ClInclude>
+    <ClInclude Include="common\inc\cudaModuleMgr.h">
+      <Filter>Source Files\NVDec</Filter>
+    </ClInclude>
+    <ClInclude Include="FFDecoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RVLDecoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
