@@ -11,7 +11,7 @@ extern "C" {
 #include <libswscale/swscale.h>
 #include <libavutil/avutil.h>
 }
-#define MY_GL_TEXTURE_TYPE GL_TEXTURE_2D
+#define MY_GL_TEXTURE_TYPE GL_TEXTURE_RECTANGLE
 #define MY_GL_PIXEL_TYPE GL_BGRA
 #define MY_AV_PIXEL_TYPE AV_PIX_FMT_BGRA
 #define INBUF_SIZE 4096
@@ -35,7 +35,7 @@ private:
 
 public:
 	FFDecoder(std::string fn);
-	bool renderVideoFrame();
+	bool renderVideoFrame(bool next);
 	bool init();
 	~FFDecoder();
 

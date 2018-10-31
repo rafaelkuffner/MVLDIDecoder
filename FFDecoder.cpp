@@ -84,7 +84,7 @@ bool FFDecoder::init() {
 		,_codec_ctx->width, _codec_ctx->height,1);
 	_packet = (AVPacket *)av_malloc(sizeof(AVPacket));
 
-
+	//av_init_packet(_packet);
 	glGenTextures(1, &_frame_tex);
 	glBindTexture(MY_GL_TEXTURE_TYPE, _frame_tex);
 	/*glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -106,7 +106,15 @@ FFDecoder::~FFDecoder()
 	if (_fmt_ctx) avformat_free_context(_fmt_ctx);
 }
 
-bool FFDecoder::renderVideoFrame() {
+bool FFDecoder::renderVideoFrame(bool next) {
+	if (!next) 
+	{
+		glBindTexture(MY_GL_TEXTURE_TYPE, _frame_tex);
+		glTexSubImage2D(MY_GL_TEXTURE_TYPE, 0, 0, 0, _codec_ctx->width,
+			_codec_ctx->height, MY_GL_PIXEL_TYPE, GL_UNSIGNED_BYTE,
+			_gl_frame->data[0]);
+		return true;
+	}
 	do {
 		if (av_read_frame(_fmt_ctx, _packet) < 0) {
 			av_packet_unref(_packet);

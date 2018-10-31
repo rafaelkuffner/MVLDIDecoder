@@ -16,18 +16,38 @@ uniform mat3 intrinsics;
 uniform mat4 camera;
 uniform mat4 model;
 
+uniform bool preCalcNormals;
+
 out Vertex
 {
     vec4 color;
 	vec4 normal;
 } vertex;
    
+
 void main() {
     //colors
 	vec4 c = texture(colorTex,vec2(vert.x,vert.y));
-	vec4 n = texture(normalTex,vec2(vert.x,vert.y));
+	//placeholder
+	vec4 n = vec4(0,0,1,1);
+	if(preCalcNormals){
+		n = texture(normalTex,vec2(vert.x,vert.y));
+		//normals
+		int mask = int(n.a * 255);
+		if((mask & 1 )== 1) n.x = -n.x;
+		if((mask & 2) == 2) n.y = -n.y;
+		if((mask & 4) == 4) n.z = -n.z;
+		n = normalize(n);
+		n.a = 1;
+		mat4 rotation = calib;
+		rotation[0][3]= 0;
+		rotation[1][3]= 0;
+		rotation[2][3]= 0;
+		n = rotation *n;
+	}
 	vec4 pos;
 	pos.z = dValue / 1000.0;
+	
 	float vertx = float(width-vert.x);
 	float verty = float(height -vert.y);
 	pos.x =  pos.z*(vertx- intrinsics[0][2])/intrinsics[0][0];
@@ -36,18 +56,7 @@ void main() {
 	//transform
 	pos = calib*pos;
 	
-	//normals
-	int mask = int(n.a * 255);
-	if((mask & 1 )== 1) n.x = -n.x;
-	if((mask & 2) == 2) n.y = -n.y;
-	if((mask & 4) == 4) n.z = -n.z;
-	n = normalize(n);
-	n.a = 1;
-	mat4 rotation = calib;
-	rotation[0][3]= 0;
-	rotation[1][3]= 0;
-	rotation[2][3]= 0;
-	n = rotation *n;
+	
 
 	if(dValue == 0)		
 		c.a = 0;

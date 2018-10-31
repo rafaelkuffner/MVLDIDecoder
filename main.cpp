@@ -41,10 +41,18 @@
 #include <boost/property_tree/ini_parser.hpp>
 
 //Video decoders
-#include "NvDec/NvDecodeGL.h"
-#include "RVLDecoder.h"
+#define ffmpeg
+//#define nvdec
 
-//#include "FFDecoder.h"
+#ifdef nvdec
+#include "NvDec/NvDecodeGL.h"
+#endif
+
+#ifdef ffmpeg
+#include "FFDecoder.h"
+#endif
+
+#include "RVLDecoder.h"
 
 typedef unsigned int uint;
 // constants
@@ -90,8 +98,14 @@ std::string colorStreamName;
 std::string depthStreamName;
 std::string normalStreamName;
 int layerNum;
-std::vector<cNvDecoder*> colorStreams;
-std::vector<cNvDecoder*> normalStreams;
+#ifdef ffmpeg
+	std::vector<FFDecoder*> colorStreams;
+	std::vector<FFDecoder*> normalStreams;
+#endif // ffmpeg
+#ifdef nvdec
+	std::vector<cNvDecoder*> colorStreams;
+	std::vector<cNvDecoder*> normalStreams;
+#endif
 std::vector<RVLDecoder*> depthStreams;
 std::vector<glm::mat4> calibStreams;
 glm::mat3 intrinsics;
@@ -399,9 +413,16 @@ static void renderPass(float resolutionMult, int outbuf,bool next){
 			brushStrokeProgram->setUniform("colorTex", 0);
 			
 			glActiveTexture(GL_TEXTURE1);
-			normalStreams[i]->renderVideoFrame(next);
-			brushStrokeProgram->setUniform("normalTex", 1);
-			
+			if(normalStreamName != "")
+			{
+				normalStreams[i]->renderVideoFrame(next);
+				brushStrokeProgram->setUniform("normalTex", 1);
+				brushStrokeProgram->setUniform("preCalcNormals", true);
+			}
+			else 
+			{
+				brushStrokeProgram->setUniform("preCalcNormals", false);
+			}
 			glBindVertexArray(gVAO);
 			glBindBuffer(GL_ARRAY_BUFFER, _depthArrayBuffer);
 			checkError("load render mapbuffer");
@@ -573,10 +594,17 @@ static void cloudRender(bool next){
 		glActiveTexture(GL_TEXTURE0);
 		colorStreams[i]->renderVideoFrame(next);
 		brushStrokeProgram->setUniform("colorTex", 0);
-
-		glActiveTexture(GL_TEXTURE1);
-		normalStreams[i]->renderVideoFrame(next);
-		brushStrokeProgram->setUniform("normalTex", 1);
+		if(normalStreamName != "")
+		{
+			normalStreams[i]->renderVideoFrame(next);
+			glActiveTexture(GL_TEXTURE1);
+			brushStrokeProgram->setUniform("normalTex", 1);	
+			brushStrokeProgram->setUniform("preCalcNormals", true);
+		}
+		else
+		{
+			brushStrokeProgram->setUniform("preCalcNormals", false);
+		}
 
 
 		brushStrokeProgram->setUniform("calib", calibStreams[i]);
@@ -803,7 +831,7 @@ void init(){
 	// load vertex and fragment shaders into opengl
 	LoadShaders();
 	stringstream ss;
-	cNvDecoder::InitCuda();
+	//cNvDecoder::InitCuda();
 	_depthBuffers = (int**)malloc(layerNum * sizeof(int*));
 	for (int i = 0; i < layerNum; i++)
 	{
@@ -811,7 +839,12 @@ void init(){
 			ss.swap(stringstream());
 			ss << videosDir << "\\" << i << colorStreamName;
 			glActiveTexture(GL_TEXTURE0);
-			cNvDecoder *dec = new cNvDecoder(ss.str(),1,exec_path);
+#ifdef nvdec
+			cNvDecoder *dec = new cNvDecoder(ss.str(),0,exec_path);
+#endif
+#ifdef ffmpeg
+			FFDecoder *dec = new FFDecoder(ss.str());
+#endif
 			dec->init();
 			colorStreams.push_back(dec);
 			
@@ -821,7 +854,12 @@ void init(){
 			ss.swap(stringstream());
 			ss << videosDir << "\\" << i << normalStreamName;
 			glActiveTexture(GL_TEXTURE1);
-			cNvDecoder *dec = new cNvDecoder(ss.str(), 1, exec_path);
+#ifdef nvdec
+			cNvDecoder *dec = new cNvDecoder(ss.str(), 0, exec_path);	
+#endif
+#ifdef ffmpeg
+			FFDecoder *dec = new FFDecoder(ss.str());
+#endif
 			dec->init();
 			normalStreams.push_back(dec);
 		}
