@@ -9,7 +9,6 @@ uniform mat4 model;
 //uniform vec3 camPosition;
 uniform float scale;
 uniform int normalMethod;
-uniform bool preCalcNormals;
 
 layout(points) in;
 layout(triangle_strip, max_vertices = 4) out;
@@ -62,12 +61,10 @@ void main() {
 		theta3 = mod(rand(vec2(gl_in[0].gl_Position.z,gl_in[0].gl_Position.z))*1000,PI3)-PI6;
 		if(abs(theta3-theta2)> PI6){
 			theta3 = theta2 < 0? theta2+PI6:theta2-PI6;
-		} 
+		}
+		
 
-		int nm = normalMethod;
-		if(!preCalcNormals) nm = 6;
-
-		 switch(nm){
+		 switch(normalMethod){
 	 
 		//-------- Spherical-------------//
 		 case 1: 

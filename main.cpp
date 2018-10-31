@@ -134,7 +134,7 @@ float gamma = 1.6f;
 float dev = 0.11f;
 string exec_path;
 
-int **_depthBuffers;
+
 GLuint _depthArrayBuffer;
 
 bool _next = true;
@@ -353,13 +353,6 @@ static void LoadBuffer() {
 	//------------------------------------------------------------- 
 
 
-	glGenBuffers(1, &_depthArrayBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, _depthArrayBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLint)* vidWidth*vidHeight , 0, GL_STREAM_DRAW);
-	// connect the xyz to the "dValue" attribute of the vertex shader
-	glEnableVertexAttribArray(brushStrokeProgram->attrib("dValue"));
-	glVertexAttribIPointer(brushStrokeProgram->attrib("dValue"), 1, GL_INT,0,NULL);
-	checkError("load buffer 2.1");
 		
 	free(varray);
 	
@@ -426,10 +419,13 @@ static void renderPass(float resolutionMult, int outbuf,bool next){
 			glBindVertexArray(gVAO);
 			glBindBuffer(GL_ARRAY_BUFFER, _depthArrayBuffer);
 			checkError("load render mapbuffer");
+
+			glActiveTexture(GL_TEXTURE2);
 			if(next){
-				depthStreams[i]->DecompressRVL(_depthBuffers[i], vidWidth*vidHeight);
+				depthStreams[i]->DecompressRVL( vidWidth*vidHeight);
 			}
-			glBufferSubData(GL_ARRAY_BUFFER, 0, vidWidth*vidHeight * sizeof(int), _depthBuffers[i]);
+			depthStreams[i]->render();
+			brushStrokeProgram->setUniform("depthTex", 2);
 						
 			brushStrokeProgram->setUniform("calib", calibStreams[i]);
 			glDrawArrays(GL_POINTS, 0, vidWidth*vidHeight);
@@ -560,64 +556,6 @@ static void threeDRenderNoBlur(bool next){
 	checkError("first pass");
 }
 
-static void cloudRender(bool next){
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	checkError("begin2");
-	//glEnable(GL_CULL_FACE);
-	////glEnable(GL_STENCIL_TEST);
-	glDepthMask(GL_TRUE);
-	glPointSize(2.0);
-	glLineWidth(3.0);
-	// clear everything
-	glClearColor(pBackgroundColor.r, pBackgroundColor.g, pBackgroundColor.b, pBackgroundColor.a);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// bind the program (the shaders)
-	g2Program->use();
-
-	// set the "camera" uniform
-	g2Program->setUniform("camera", gCamera.matrix());
-
-	// set the "model" uniform in the vertex shader, based on the gDegreesRotated global
-	g2Program->setUniform("model", glm::rotate(glm::mat4(), glm::radians(gDegreesRotated), glm::vec3(0, 1, 0)));
-
-
-	// bind the texture and set the "tex" uniform in the fragment shader
-
-	///CHAMAR AS PARADAS DOS VIDEOS
-	for (int i = 0; i < layerNum; i++)
-	{
-		glActiveTexture(GL_TEXTURE0);
-		colorStreams[i]->renderVideoFrame(next);
-		brushStrokeProgram->setUniform("colorTex", 0);
-		if(normalStreamName != "")
-		{
-			normalStreams[i]->renderVideoFrame(next);
-			glActiveTexture(GL_TEXTURE1);
-			brushStrokeProgram->setUniform("normalTex", 1);	
-			brushStrokeProgram->setUniform("preCalcNormals", true);
-		}
-		else
-		{
-			brushStrokeProgram->setUniform("preCalcNormals", false);
-		}
-
-
-		brushStrokeProgram->setUniform("calib", calibStreams[i]);
-		glDrawArrays(GL_POINTS, 0, vidWidth*vidHeight);
-			
-	}
-
-	checkError("draw");
-	// unbind the VAO, the program and the texture
-	glBindVertexArray(0);
-	g2Program->stopUsing();
-}
-
 void drawQuad(tdogl::Program *prog) {
 
 	glUseProgram(prog->object());
@@ -632,7 +570,6 @@ void drawQuad(tdogl::Program *prog) {
 // draws a single frame
 static void Render(bool next) {
 	threeDRenderNoBlur(next);
-	//cloudRender(next);
 	glfwSwapBuffers(gWindow);
 }
 
@@ -832,7 +769,6 @@ void init(){
 	LoadShaders();
 	stringstream ss;
 	//cNvDecoder::InitCuda();
-	_depthBuffers = (int**)malloc(layerNum * sizeof(int*));
 	for (int i = 0; i < layerNum; i++)
 	{
 		if (colorStreamName != ""){
@@ -868,8 +804,8 @@ void init(){
 			ss.swap(stringstream());
 			ss << videosDir << "\\" << i << depthStreamName;
 			RVLDecoder *dec = new RVLDecoder();
+			glActiveTexture(GL_TEXTURE2);
 			dec->InitDecoder(vidWidth, vidHeight, ss.str());
-			_depthBuffers[i] = (int*)malloc(sizeof(int)*vidWidth*vidHeight);
 			depthStreams.push_back(dec);
 		}
 

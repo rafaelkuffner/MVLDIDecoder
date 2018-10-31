@@ -1,7 +1,9 @@
 #pragma once
 
+#include <GL/glew.h>
 #include <string>
 #include <Windows.h>
+
 using namespace std;
 
 class RVLDecoder
@@ -13,7 +15,8 @@ private:
 	byte _sizeBuffer[4];
 	int _width, _height;
 	string _inputPath;
-
+	byte *_depthBuffer;
+	GLuint _texid;
 public:
 	RVLDecoder();
 	virtual ~RVLDecoder();
@@ -24,6 +27,6 @@ private:
 public:
 	bool	InitDecoder(int width, int height, string inputPath);
 	void	ResetDecoder();
-	void	DecompressRVL(int* output, int numPixels);
-
+	void	DecompressRVL( int numPixels);
+	void	render();
 };

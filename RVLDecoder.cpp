@@ -21,6 +21,11 @@ bool RVLDecoder::InitDecoder(int width, int height, string inputPath) {
 	if(_input == NULL){
 		_input = (byte*)malloc(sizeof(short)*width*height);
 	}
+	_depthBuffer = (byte*)malloc(sizeof(byte)*width*height*4);
+
+	glGenTextures(1, &_texid);
+	glBindTexture(GL_TEXTURE_RECTANGLE, _texid);
+	glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
 	return true;
 }
 
@@ -50,9 +55,19 @@ int RVLDecoder::DecodeVLE()
 	return value;
 }
 
-void RVLDecoder::DecompressRVL(int* output, int numPixels)
+void RVLDecoder::render() 
+{
+	glBindTexture(GL_TEXTURE_RECTANGLE, _texid);
+	glTexSubImage2D(GL_TEXTURE_RECTANGLE, 0, 0, 0, _width,
+		_height, GL_BGRA, GL_UNSIGNED_BYTE,
+		_depthBuffer);
+	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+}
+void RVLDecoder::DecompressRVL(int numPixels)
 {
 	DWORD bytesRead;
+	byte* output = _depthBuffer;
 	ReadFile(_inFile, _sizeBuffer, 4, &bytesRead, NULL);
 	if (bytesRead == 0) {
 		ResetDecoder();
@@ -72,6 +87,9 @@ void RVLDecoder::DecompressRVL(int* output, int numPixels)
 		numPixelsToDecode -= zeros;
 		for (; zeros; zeros--){
  			*output++ = 0;
+			*output++ = 0;
+			*output++ = 0;
+			*output++ = 0;
 		}
 		int nonzeros = DecodeVLE(); // number of nonzeros
 		numPixelsToDecode -= nonzeros;
@@ -81,6 +99,9 @@ void RVLDecoder::DecompressRVL(int* output, int numPixels)
 			int delta = (positive >> 1) ^ -(positive & 1);
 			current = previous + delta;
 			*output++ = current;
+			*output++ = (current >>8);
+			*output++ = (current >> 0x10);
+			*output++ = (current >> 0x18);
 			previous = current;
 		}
 	}
